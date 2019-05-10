@@ -1,20 +1,38 @@
 {
   "ahirBhairav": {
-    "selectOption": "Rāg Ahīr Bhairav - Yashaswi Sirpotdar (calan) - 1:49"
+    "selectOption": "Rāg Ahīr Bhairav - Yashaswi Sirpotdar (calan) - 1:49",
+    "recording": "calan-ahirBhairav",
+    "duration": 109.12,
+    "rag": "ahirBhairav"
   },
   "bhupali": {
-    "selectOption": "Rāg Bhūpālī - Yashaswi Sirpotdar (calan) - 1:57"
+    "selectOption": "Rāg Bhūpālī - Yashaswi Sirpotdar (calan) - 1:57",
+    "recording": "calan-bhupali",
+    "duration": 117.36,
+    "rag": "bhupali"
   },
   "deskar": {
-    "selectOption": "Rāg Deśkār - Yashaswi Sirpotdar (calan) - 0:22"
+    "selectOption": "Rāg Deśkār - Yashaswi Sirpotdar (calan) - 0:22",
+    "recording": "calan-deskar",
+    "duration": 22.95,
+    "rag": "deskar"
   },
   "jog": {
-    "selectOption": "Rāg Jog - Yashaswi Sirpotdar (calan) - 1:43"
+    "selectOption": "Rāg Jog - Yashaswi Sirpotdar (calan) - 1:43",
+    "recording": "calan-jog",
+    "duration": 103.65,
+    "rag": "jog"
   },
   "malkauns": {
-    "selectOption": "Rāg Mālkauns - Yashaswi Sirpotdar (calan) - 1:56"
+    "selectOption": "Rāg Mālkauns - Yashaswi Sirpotdar (calan) - 1:56",
+    "recording": "calan-malkauns",
+    "duration": 116.56,
+    "rag": "malkauns"
   },
   "yaman": {
-    "selectOption": "Rāg Yaman - Yashaswi Sirpotdar (calan) - 1:32"
+    "selectOption": "Rāg Yaman - Yashaswi Sirpotdar (calan) - 1:32",
+    "recording": "calan-yaman",
+    "duration": 92.08,
+    "rag": "yaman"
   }
 }

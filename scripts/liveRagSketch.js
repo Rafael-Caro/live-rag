@@ -24,13 +24,13 @@ var trackDuration;
 var ragName;
 
 var ragMenu;
-var recordingMenu;
+var recordingsMenu;
 var buttonPlay;
 
 var cursorTop;
 var cursorBottom;
 var cursorY = 0;
-var navBoxH = 50;
+var navBoxH = 25;
 var navCursor;
 var navBox;
 var navCursorW = 4;
@@ -83,8 +83,18 @@ function setup () {
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
 
+  buttonPlay = createButton("Load")
+    .size(80, 25)
+    .mouseClicked(player)
+    .attribute("hidden", "true")
+    .parent("sketch-holder");
+  buttonPlay.position(extraSpaceW + margin, height - buttonPlay.height - margin);
+
+  navBox = new CreateNavigationBox();
+  navCursor = new CreateNavCursor();
+
   cursorTop = extraSpaceH + margin*3 + 50;
-  cursorBottom = height - margin*3;
+  cursorBottom = navBox.y1 - margin*2;
   melCursorX = extraSpaceW + (mainSpace / 2);
 
   ragMenu = createSelect()
@@ -121,13 +131,13 @@ function setup () {
     ragMenu.option(rag, ragList[i]);
   }
 
-  recordingMenu = createSelect()
+  recordingsMenu = createSelect()
     .size(120, 25)
-    // .changed(start)
+    .changed(start)
     .parent("sketch-holder");
-  recordingMenu.position(width - recordingMenu.width - margin, margin);
-  recordingMenu.option("Select a recording");
-  var noRec = recordingMenu.child();
+  recordingsMenu.position(width - recordingsMenu.width - margin, margin);
+  recordingsMenu.option("Select a recording");
+  var noRec = recordingsMenu.child();
   noRec[0].setAttribute("selected", "true");
   noRec[0].setAttribute("disabled", "true");
   noRec[0].setAttribute("hidden", "true");
@@ -135,16 +145,8 @@ function setup () {
   var recList = Object.keys(recordingsList);
   for (var i = 0; i < recList.length; i++) {
     var rec = recordingsList[recList[i]].selectOption;
-    recordingMenu.option(rec, recList[i]);
+    recordingsMenu.option(rec, recList[i]);
   }
-
-  buttonPlay = createButton("Load")
-    .size(100, 25)
-    .mouseClicked(player)
-    .attribute("disabled", "true")
-    .attribute("hidden", "true")
-    .parent("sketch-holder");
-  buttonPlay.position(extraSpaceW + margin, height - buttonPlay.height - margin);
 }
 
 function draw () {
@@ -172,8 +174,10 @@ function draw () {
   }
 
   if (loaded) {
+    navBox.displayBack();
     navCursor.update();
     navCursor.display();
+    navBox.displayFront();
     clock.display();
 
     if (!paused) {
@@ -182,7 +186,7 @@ function draw () {
 
     var x = str(currentTime.toFixed(2));
     var p = pitchTrack[x];
-    if (p != "s" && p >= minHz && p <= maxHz && showCursor.checked()) {
+    if (p != "s" && p >= minHz && p <= maxHz) {
       var targetY = map(p, minHz, maxHz, cursorBottom, cursorTop);
       cursorY += (targetY - cursorY) * easing;
       fill("red");
@@ -195,13 +199,11 @@ function draw () {
 
 function startRag () {
   var currentRag = ragInfo[ragMenu.value()];
-  pitchSpace = currentRag.pitchSpace;
-  print(pitchSpace);
+  pitchSpace = currentRag.pitchSpace
   ragName = currentRag.name + " " + currentRag.nameTrans;
   minHz = pitchSpace[0].cent-100;
   maxHz = pitchSpace[pitchSpace.length-1].cent+100;
   svaraList = [];
-  soundList = {};
   for (var i = 0; i < pitchSpace.length; i++) {
     var svara = new CreateSvara(pitchSpace[i]);
     svaraList.push(svara);
@@ -216,53 +218,28 @@ function start () {
   paused = true;
   loaded = false;
   currentTime = 0;
-  talBoxes = [];
-  talList = [];
-  talName = undefined;
-  samList = [];
-  currentTal = undefined;
-  charger.angle = undefined;
-  mpmTxt = undefined;
-  var currentRecording = recordingsInfo[recordingsList[selectMenu.value()].mbid];
-  trackFile = currentRecording.info.trackFile;
-  rag = currentRecording.rag.name + " " + currentRecording.rag.nameTrans;
-  artist = currentRecording.info.artist;
-  link = currentRecording.info.link;
-  infoLink.attribute("href", link)
-    .html("+info");
-  trackDuration = currentRecording.info.duration;
-  pitchSpace = currentRecording.rag.pitchSpace;
+  var currentRecording = recordingsList[recordingsMenu.value()];
+  trackFile = currentRecording.recording;
+  trackDuration = currentRecording.duration;
+  var currentRag = ragInfo[recordingsMenu.value()];
+  pitchSpace = currentRag.pitchSpace
+  ragName = currentRag.name + " " + currentRag.nameTrans;
   minHz = pitchSpace[0].cent-100;
   maxHz = pitchSpace[pitchSpace.length-1].cent+100;
   svaraList = [];
-  soundList = {};
   for (var i = 0; i < pitchSpace.length; i++) {
     var svara = new CreateSvara(pitchSpace[i]);
     svaraList.push(svara);
-    createSound(pitchSpace[i]);
   }
-  // pitchTrack = currentRecording.rag.pitchTrack;
-  pitchTrack = loadJSON('../files/pitchTracks/'+recordingsList[selectMenu.value()].mbid+'_pitchTrack.json');
-  for (var i = 0; i < currentRecording.talList.length; i++) {
-    var tal = currentRecording.talList[i];
-    talList[tal.tal] = {
-      "start": tal.start,
-      "end": tal.end,
-      "sam": tal.sam
-    }
-    samList = samList.concat(tal.sam);
-    var talBox = new CreateTalBox(tal);
-    talBoxes.push(talBox);
-    var talCircle = new CreateTalCircle(talBox.tal);
-    talCircles[tal.tal] = talCircle;
-  }
-  currentAvart = new CreateCurrentAvart();
-  shade = new CreateShade();
+  pitchTrack = loadJSON('files/pitchTracks/'+trackFile+'_pitchTrack.json');
+  buttonPlay.removeAttribute("hidden");
+  buttonPlay.html("Load");
+
   clock = new CreateClock;
 }
 
 function CreateNavigationBox () {
-  this.x1 = extraSpaceW + margin;
+  this.x1 = buttonPlay.width + margin * 2;
   this.x2 = width - margin;
   this.y1 = height - margin - navBoxH;
   this.y2 = height - margin;
@@ -272,12 +249,6 @@ function CreateNavigationBox () {
     fill(0, 50);
     noStroke();
     rect(this.x1, this.y1, this.w, navBoxH);
-    for (var i = 0; i < samList.length; i++) {
-      stroke(255);
-      strokeWeight(1);
-      var samX = map(samList[i], 0, trackDuration, this.x1+navCursorW/2, this.x2-navCursorW/2);
-      line(samX, this.y1, samX, this.y2);
-    }
   }
 
   this.displayFront = function () {
@@ -416,12 +387,12 @@ function CreateClock () {
   this.display = function () {
     this.now = niceTime(currentTime);
     this.clock = this.now + " / " + this.total;
-    textAlign(CENTER, BOTTOM);
+    textAlign(RIGHT, BOTTOM);
     textSize(12);
     textStyle(NORMAL);
     noStroke();
     fill(frontColor);
-    text(this.clock, extraSpaceW + mainSpace/2, navBox.y1 - margin/2);
+    text(this.clock, width - margin, navBox.y1 - margin);
   }
 }
 
@@ -436,27 +407,28 @@ function player () {
         track.jump(jump);
         jump = undefined;
       }
-      buttonPlay.html(lang_pause);
+      buttonPlay.html("Pause");
     } else {
       paused = true;
       currentTime = track.currentTime();
       track.pause();
-      buttonPlay.html(lang_continue);
+      buttonPlay.html("Play");
     }
   } else {
     initLoading = millis();
-    buttonPlay.html(lang_loading);
+    buttonPlay.html("Loading...");
     buttonPlay.attribute("disabled", "true");
-    selectMenu.attribute("disabled", "true");
-    charger.angle = 0;
-    track = loadSound("../tracks/" + trackFile, soundLoaded, failedLoad);
+    recordingsMenu.attribute("disabled", "true");
+    ragMenu.attribute("disabled", "true");
+    track = loadSound("tracks/" + trackFile + '.mp3', soundLoaded, failedLoad);
   }
 }
 
 function soundLoaded () {
-  buttonPlay.html(lang_start);
+  buttonPlay.html("Play");
   buttonPlay.removeAttribute("disabled");
-  selectMenu.removeAttribute("disabled");
+  ragMenu.removeAttribute("disabled");
+  recordingsMenu.removeAttribute("disabled");
   loaded = true;
   var endLoading = millis();
   print("Track loaded in " + (endLoading-initLoading)/1000 + " seconds");

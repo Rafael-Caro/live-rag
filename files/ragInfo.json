@@ -1,0 +1,83 @@
+{
+  "yaman": {
+    "name": "राग यमन",
+    "nameTrans": "Rāg Yaman",
+    "pitchSpace": [
+      {
+        "svara": "Pa",
+        "cent": -500,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": -300,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": -100,
+        "function": "samvadi"
+      },
+      {
+        "svara": "Sa",
+        "cent": 0,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 200,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 400,
+        "function": "vadi"
+      },
+      {
+        "svara": "Ma",
+        "cent": 600,
+        "function": ""
+      },
+      {
+        "svara": "Pa",
+        "cent": 700,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": 900,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": 1100,
+        "function": "samvadi"
+      },
+      {
+        "svara": "Sa",
+        "cent": 1200,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 1400,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 1600,
+        "function": "vadi"
+      },
+      {
+        "svara": "Ma",
+        "cent": 1800,
+        "function": ""
+      },
+      {
+        "svara": "Pa",
+        "cent": 1900,
+        "function": ""
+      }
+    ]
+  }
+}

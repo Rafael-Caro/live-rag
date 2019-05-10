@@ -1,4 +1,4 @@
-var currentPitch = 200;
+var currentPitch;
 var live = false;
 
 var extraSpaceH = 45;

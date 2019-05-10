@@ -1,3 +1,6 @@
+var currentPitch = 200;
+var live = false;
+
 var extraSpaceH = 45;
 var extraSpaceW = 0;
 var mainSpace = 600;
@@ -119,12 +122,7 @@ function setup () {
     .position(extraSpaceW + margin, margin)
     .changed(startRag)
     .parent("sketch-holder");
-  ragMenu.option("Select a rāg");
-  var noRec = ragMenu.child();
-  noRec[0].setAttribute("selected", "true");
-  noRec[0].setAttribute("disabled", "true");
-  noRec[0].setAttribute("hidden", "true");
-  noRec[0].setAttribute("style", "display: none");
+  ragMenu.option("Select a rāg", "None");
   var ragList = Object.keys(ragInfo);
   for (var i = 0; i < ragList.length; i++) {
     var rag = ragInfo[ragList[i]].name + " " + ragInfo[ragList[i]].nameTrans;
@@ -136,12 +134,7 @@ function setup () {
     .changed(start)
     .parent("sketch-holder");
   recordingsMenu.position(width - recordingsMenu.width - margin, margin);
-  recordingsMenu.option("Select a recording");
-  var noRec = recordingsMenu.child();
-  noRec[0].setAttribute("selected", "true");
-  noRec[0].setAttribute("disabled", "true");
-  noRec[0].setAttribute("hidden", "true");
-  noRec[0].setAttribute("style", "display: none");
+  recordingsMenu.option("Select a recording", "None");
   var recList = Object.keys(recordingsList);
   for (var i = 0; i < recList.length; i++) {
     var rec = recordingsList[recList[i]].selectOption;
@@ -185,9 +178,18 @@ function draw () {
     }
 
     var x = str(currentTime.toFixed(2));
-    var p = pitchTrack[x];
-    if (p != "s" && p >= minHz && p <= maxHz) {
-      var targetY = map(p, minHz, maxHz, cursorBottom, cursorTop);
+    currentPitch = pitchTrack[x];
+    if (currentPitch != "s" && currentPitch >= minHz && currentPitch <= maxHz) {
+      var targetY = map(currentPitch, minHz, maxHz, cursorBottom, cursorTop);
+      cursorY += (targetY - cursorY) * easing;
+      fill("red");
+      stroke(frontColor);
+      strokeWeight(1);
+      ellipse(melCursorX, cursorY, 5, 5);
+    }
+  } else if (live) {
+    if (currentPitch != "s" && currentPitch >= minHz && currentPitch <= maxHz) {
+      var targetY = map(currentPitch, -600, 2000, cursorBottom, cursorTop);
       cursorY += (targetY - cursorY) * easing;
       fill("red");
       stroke(frontColor);
@@ -198,6 +200,11 @@ function draw () {
 }
 
 function startRag () {
+  if (loaded) {
+    track.stop();
+  }
+  loaded = false;
+  live = true;
   var currentRag = ragInfo[ragMenu.value()];
   pitchSpace = currentRag.pitchSpace
   ragName = currentRag.name + " " + currentRag.nameTrans;
@@ -209,9 +216,12 @@ function startRag () {
     svaraList.push(svara);
   }
   buttonPlay.attribute("hidden", true);
+  recordingsMenu.value("None");
+  ragMenu.value("None");
 }
 
 function start () {
+  live = false;
   if (loaded) {
     track.stop();
   }
@@ -236,6 +246,9 @@ function start () {
   buttonPlay.html("Load");
 
   clock = new CreateClock;
+
+  recordingsMenu.value("None");
+  ragMenu.value("None");
 }
 
 function CreateNavigationBox () {

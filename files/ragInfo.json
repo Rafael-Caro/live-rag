@@ -80,6 +80,87 @@
       }
     ]
   },
+  "bagesri": {
+    "name": "राग बागेश्री",
+    "nameTrans": "Rāg Bāgeśrī",
+    "pitchSpace": [
+      {
+        "svara": "Pa",
+        "cent": -500,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": -300,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": -200,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 0,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 200,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 300,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 500,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 700,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": 900,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": 1000,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 1200,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 1400,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 1500,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 1700,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 1900,
+        "function": ""
+      }
+    ]
+  },
   "bhairavi": {
     "name": "राग भैरवी",
     "nameTrans": "Rāg Bhairavī",
@@ -142,6 +223,87 @@
       {
         "svara": "Re",
         "cent": 1300,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 1500,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 1700,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 1900,
+        "function": ""
+      }
+    ]
+  },
+  "bhimpalasi": {
+    "name": "राग भीमपलासी",
+    "nameTrans": "Rāg Bhīmpalāsī",
+    "pitchSpace": [
+      {
+        "svara": "Pa",
+        "cent": -500,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": -300,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": -200,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 0,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 200,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 300,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 500,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 700,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": 900,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": 1000,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 1200,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 1400,
         "function": ""
       },
       {

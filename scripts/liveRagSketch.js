@@ -77,6 +77,11 @@ function setup () {
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
 
+  recordButton = createButton("Record")
+    .size(40,  25)
+    .mouseClicked(onClickRecord)
+    .parent("sketch-holder");
+
   buttonPlay = createButton("Load")
     .size(80, 25)
     .mouseClicked(player)
@@ -425,7 +430,7 @@ function niceTime (seconds) {
   return niceTime
 }
 
-var handleSuccess = function(stream) {
+handleSuccess = function(stream) {
   var context = new AudioContext();
   var source = context.createMediaStreamSource(stream);
   var processor = context.createScriptProcessor(1024, 1, 1);
@@ -443,5 +448,8 @@ var handleSuccess = function(stream) {
   }
 }
 
-navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+
+onClickRecord = function() {
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
+}

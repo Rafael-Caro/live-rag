@@ -372,9 +372,11 @@ function CreateSvara (svara) {
   this.x2 = this.x1 + svaraLine/2 + (svaraRadius1*2 + margin) * this.position;
 
   this.displayLines = function () {
-    stroke(frontColor);
-    strokeWeight(this.lineW);
-    line(this.x1-svaraLine/2-this.extraX, this.y, this.x2, this.y)
+    if (this.name != "") {
+      stroke(frontColor);
+      strokeWeight(this.lineW);
+      line(this.x1-svaraLine/2-this.extraX, this.y, this.x2, this.y)
+    }
   }
 
   this.displaySvara = function () {

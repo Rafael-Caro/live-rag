@@ -1,6 +1,6 @@
 var currentPitch;
 var live = false;
-var refBaseNote = 329.6;
+var refBaseNote = 164.8;
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;
@@ -183,9 +183,9 @@ function draw () {
     }
 
     var x = str(currentTime.toFixed(2));
-    currentPitch = pitchTrack[x];
-    if (currentPitch != "s" && currentPitch >= minHz && currentPitch <= maxHz) {
-      var targetY = map(currentPitch, minHz, maxHz, cursorBottom, cursorTop);
+    p = pitchTrack[x];
+    if (p != "s" && p >= minHz && p <= maxHz) {
+      var targetY = map(p, minHz, maxHz, cursorBottom, cursorTop);
       cursorY += (targetY - cursorY) * easing;
       fill("red");
       stroke(frontColor);
@@ -472,24 +472,22 @@ function niceTime (seconds) {
 }
 
 var handleSuccess = function(stream) {
-    var context = new AudioContext();
-    var source = context.createMediaStreamSource(stream);
-    var processor = context.createScriptProcessor(1024, 1, 1);
+  var context = new AudioContext();
+  var source = context.createMediaStreamSource(stream);
+  var processor = context.createScriptProcessor(1024, 1, 1);
 
-    source.connect(processor);
-    processor.connect(context.destination);
+  source.connect(processor);
+  processor.connect(context.destination);
 
-    processor.onaudioprocess = function(e) {
-      // Do something with the data, i.e Convert this to WAV
-      // console.log(e.inputBuffer);
-      var frequency = yin(e.inputBuffer.getChannelData(0), audioCtx.sampleRate, 0.3)
-      //console.log(frequency)
-      currentPitch = 1200*Math.log2(frequency/refBaseNote);
-      console.log(currentPitch);
-    };
-  };
+  processor.onaudioprocess = function(e) {
+    // Do something with the data, i.e Convert this to WAV
+    // console.log(e.inputBuffer);
+    var frequency = yin(e.inputBuffer.getChannelData(0), audioCtx.sampleRate, 0.3)
+    //console.log(frequency)
+    currentPitch = 1200*Math.log2(frequency/refBaseNote);
+    console.log(currentPitch);
+  }
+}
 
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-      .then(handleSuccess);
-
-
+navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(handleSuccess);

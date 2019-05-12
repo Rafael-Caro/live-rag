@@ -39,6 +39,7 @@ var navCursor;
 var navBox;
 var navCursorW = 4;
 var melCursorX;
+var melCursorRadius = 8;
 var clock;
 
 var loaded = false;
@@ -154,19 +155,19 @@ function draw () {
     if (p != "s" && p >= minHz && p <= maxHz) {
       var targetY = map(p, minHz, maxHz, cursorBottom, cursorTop);
       cursorY += (targetY - cursorY) * easing;
-      fill("red");
-      stroke(frontColor);
-      strokeWeight(1);
-      ellipse(melCursorX, cursorY, 5, 5);
+      fill("white");
+      stroke("black");
+      strokeWeight(3);
+      ellipse(melCursorX, cursorY, melCursorRadius, melCursorRadius);
     }
   } else if (live) {
     if (currentPitch != "s" && currentPitch >= minHz && currentPitch <= maxHz) {
       var targetY = map(currentPitch, -600, 2000, cursorBottom, cursorTop);
       cursorY += (targetY - cursorY) * easing;
-      fill("red");
-      stroke(frontColor);
-      strokeWeight(1);
-      ellipse(melCursorX, cursorY, 5, 5);
+      fill("white");
+      stroke("black");
+      strokeWeight(3);
+      ellipse(melCursorX, cursorY, melCursorRadius, melCursorRadius);
     }
   }
 }

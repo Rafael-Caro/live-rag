@@ -41,24 +41,8 @@ var navCursorW = 4;
 var melCursorX;
 var clock;
 
-var talCursor;
-var talX;
-var talY;
-var talRadius;
-var talBoxes = [];
-var talList = {};
-var talCircles = {};
-var talName = undefined;
-var currentTal = undefined;
-var currentAvart;
-var strokeRadius1 = 20;
-var strokeRadius2 = 15;
-var iconDistance = 0.7;
-
-var failedLoading;
 var loaded = false;
 var paused = true;
-var charger;
 var currentTime = 0;
 var jump;
 
@@ -297,24 +281,8 @@ function CreateNavCursor () {
 
   this.update = function () {
     this.x = map(currentTime, 0, trackDuration, navBox.x1+navCursorW/2, navBox.x2-navCursorW/2);
-    var noTal = true;
-    for (var i = 0; i < talBoxes.length; i++) {
-      var talBox = talBoxes[i];
-      if (this.x > talBox.x1 && this.x < talBox.x2) {
-        talBox.on();
-        currentTal = talBox.talIndex;
-        talName = talBox.fullName;
-        noTal = false;
-      } else {
-        talBox.off();
-      }
-    }
-    if (noTal) {
-      currentTal = undefined;
-      talName = undefined;
-    }
     if (navBox.x2 - navCursorW/2 - this.x < 0.1) {
-      buttonPlay.html(lang_start);
+      buttonPlay.html("Play");
       track.stop();
       paused = true;
       currentTime = 0;
@@ -456,7 +424,6 @@ function soundLoaded () {
 
 function failedLoad () {
   print("Loading failed");
-  failedLoading = true;
 }
 
 function mouseClicked () {

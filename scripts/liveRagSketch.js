@@ -1,5 +1,6 @@
 var currentPitch;
 var live = false;
+var refBaseNote = 329.6;
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;
@@ -60,6 +61,10 @@ var paused = true;
 var charger;
 var currentTime = 0;
 var jump;
+
+// web audio api
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
 
 function preload() {
   ragInfo = loadJSON("files/ragInfo.json");
@@ -465,3 +470,26 @@ function niceTime (seconds) {
   niceTime = str(min).padStart(2, "0") + ":" + str(sec).padStart(2, "0");
   return niceTime
 }
+
+var handleSuccess = function(stream) {
+    var context = new AudioContext();
+    var source = context.createMediaStreamSource(stream);
+    var processor = context.createScriptProcessor(1024, 1, 1);
+
+    source.connect(processor);
+    processor.connect(context.destination);
+
+    processor.onaudioprocess = function(e) {
+      // Do something with the data, i.e Convert this to WAV
+      // console.log(e.inputBuffer);
+      var frequency = yin(e.inputBuffer.getChannelData(0), audioCtx.sampleRate, 0.3)
+      //console.log(frequency)
+      currentPitch = 1200*Math.log2(frequency/refBaseNote);
+      console.log(currentPitch);
+    };
+  };
+
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      .then(handleSuccess);
+
+

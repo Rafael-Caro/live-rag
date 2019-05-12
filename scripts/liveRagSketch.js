@@ -94,27 +94,10 @@ function setup () {
     .position(extraSpaceW + margin, margin)
     .changed(startRag)
     .parent("sketch-holder");
-  ragMenu.option("Select a rāg");
-  var noRec = ragMenu.child();
-  noRec[0].setAttribute("selected", "true");
-  noRec[0].setAttribute("disabled", "true");
-  noRec[0].setAttribute("hidden", "true");
-  noRec[0].setAttribute("style", "display: none");
-  ragList = Object.keys(ragInfo);
-  for (var i = 0; i < ragList.length; i++) {
-    var rag = ragInfo[ragList[i]].name + " " + ragInfo[ragList[i]].nameTrans;
-    ragMenu.option(rag, ragList[i]);
-  }
-
-  ragMenu = createSelect()
-    .size(120, 25)
-    .position(extraSpaceW + margin, margin)
-    .changed(startRag)
-    .parent("sketch-holder");
   ragMenu.option("Select a rāg", "None");
   var ragList = Object.keys(ragInfo);
   for (var i = 0; i < ragList.length; i++) {
-    var rag = ragInfo[ragList[i]].name + " " + ragInfo[ragList[i]].nameTrans;
+    var rag = ragInfo[ragList[i]].name + " | " + ragInfo[ragList[i]].nameTrans;
     ragMenu.option(rag, ragList[i]);
   }
 

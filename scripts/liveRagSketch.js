@@ -1,6 +1,7 @@
 var currentPitch;
 var live = false;
-var refBaseNote = 164.8;
+// var refBaseNote = 164.8;
+var refBaseNote = 329.6
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;

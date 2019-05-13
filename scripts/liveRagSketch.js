@@ -82,10 +82,10 @@ function setup () {
   shadeColor = color(120, 0, 0);
 
   recordButton = createButton("Mic Input")
-    .size(40,  40)
+    .size(40,  100)
     .mouseClicked(onClickRecord)
     .parent("sketch-holder");
-  recordButton.position(extraSpaceW + margin + 5, margin + 5);
+  recordButton.position(extraSpaceW + margin, extraSpaceH);
 
   buttonPlay = createButton("Load")
     .size(80, 25)

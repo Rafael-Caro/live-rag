@@ -31,6 +31,9 @@ var ragName;
 var ragMenu;
 var recordingsMenu;
 var buttonPlay;
+var recordButton;
+var stopStatus = false;
+var micButtonStatus = true;
 
 var cursorTop;
 var cursorBottom;
@@ -47,6 +50,8 @@ var loaded = false;
 var paused = true;
 var currentTime = 0;
 var jump;
+// getUserMedia() reference var
+var localStream;
 
 // web audio api
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -76,6 +81,12 @@ function setup () {
   backColorTrans = color(120, 0, 0, 100);
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
+
+  recordButton = createButton("Enable Mic Input")
+    .size(80,  50)
+    .mouseClicked(onClickMicButton)
+    .parent("sketch-holder");
+  recordButton.position(extraSpaceW + margin, extraSpaceH);
 
   buttonPlay = createButton("Load")
     .size(80, 25)
@@ -425,14 +436,14 @@ function niceTime (seconds) {
   return niceTime
 }
 
-var handleSuccess = function(stream) {
+handleSuccess = function(stream) {
   var context = new AudioContext();
   var source = context.createMediaStreamSource(stream);
   var processor = context.createScriptProcessor(1024, 1, 1);
 
   source.connect(processor);
   processor.connect(context.destination);
-
+  localStream = stream;
   processor.onaudioprocess = function(e) {
     // Do something with the data, i.e Convert this to WAV
     // console.log(e.inputBuffer);
@@ -440,8 +451,27 @@ var handleSuccess = function(stream) {
     //console.log(frequency)
     currentPitch = 1200*Math.log2(frequency/refBaseNote);
     console.log(currentPitch);
+    if (stopStatus){
+      context.close();
+    }
   }
 }
 
-navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+// callback function to start/stop using microphone input
+onClickMicButton = function() {
+  if (micButtonStatus) {
+    recordButton.html("Stop Mic Input");
+    micButtonStatus = false;
+    stopStatus = false;
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
+  }
+  else {
+    recordButton.html("Enable Mic Input");
+    // stop the microphone access
+    localStream.getAudioTracks()[0].stop();
+    micButtonStatus = true;
+    stopStatus = true;
+  }
+}
+

@@ -32,6 +32,7 @@ var ragMenu;
 var recordingsMenu;
 var buttonPlay;
 var recordButton;
+var micCheckBox;
 var stopStatus = false;
 var micButtonStatus = true;
 
@@ -87,6 +88,12 @@ function setup () {
     .mouseClicked(onClickMicButton)
     .parent("sketch-holder");
   recordButton.position(extraSpaceW + margin, extraSpaceH);
+
+  micCheckBox = createCheckBox("Enable Mic Input", false)
+    .size(100, 50)
+    .changed(onClickMicButton)
+    .parent("sketch-holder");
+  micCheckBox.position(extraSpaceH + margin, extraSpaceW);
 
   buttonPlay = createButton("Load")
     .size(80, 25)
@@ -474,3 +481,21 @@ onClickMicButton = function() {
     stopStatus = true;
   }
 }
+
+
+// callback function to start/stop using microphone input
+onChangeMicStatus = function() {
+  if (this.checked()) {
+    stopStatus = false;
+    micCheckBox.html("Stop Mic Input");
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(handleSuccess);
+  }
+  else {
+    // stop the microphone access
+    micCheckBox.html("Enable Mic Input");
+    localStream.getAudioTracks()[0].stop();
+    stopStatus = true;
+  }
+}
+

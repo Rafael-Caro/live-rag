@@ -582,6 +582,137 @@
       }
     ]
   },
+  "mishra-bhairavi": {
+    "name": "राग मिश्रा भैरवीी",
+    "nameTrans": "Rāg Miśrā Bhairavī",
+    "pitchSpace": [
+      {
+        "svara": "Pa",
+        "cent": -500,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": -400,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": -300,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": -200,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": -100,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 0,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 100,
+        "function": ""
+      },
+      {
+        "svara": "Re",
+        "cent": 200,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 300,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 400,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 500,
+        "function": "vadi"
+      },
+      {
+        "svara": "Ma",
+        "cent": 600,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 700,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": 800,
+        "function": ""
+      },
+      {
+        "svara": "Dha",
+        "cent": 900,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": 1000,
+        "function": ""
+      },
+      {
+        "svara": "Ni",
+        "cent": 1100,
+        "function": ""
+      },
+      {
+        "svara": "Sa",
+        "cent": 1200,
+        "function": "sadja"
+      },
+      {
+        "svara": "Re",
+        "cent": 1300,
+        "function": ""
+      },
+      {
+        "svara": "Re",
+        "cent": 1400,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 1500,
+        "function": ""
+      },
+      {
+        "svara": "Ga",
+        "cent": 1600,
+        "function": ""
+      },
+      {
+        "svara": "Ma",
+        "cent": 1700,
+        "function": "vadi"
+      },
+      {
+        "svara": "Ma",
+        "cent": 1800,
+        "function": "vadi"
+      },
+      {
+        "svara": "Pa",
+        "cent": 1900,
+        "function": ""
+      }
+    ]
+  },
   "yaman": {
     "name": "राग यमन",
     "nameTrans": "Rāg Yaman",

@@ -31,6 +31,8 @@ var ragName;
 var ragMenu;
 var recordingsMenu;
 var buttonPlay;
+var recordButton;
+var micButtonStatus = true;
 
 var cursorTop;
 var cursorBottom;
@@ -47,6 +49,8 @@ var loaded = false;
 var paused = true;
 var currentTime = 0;
 var jump;
+// getUserMedia() reference var
+var localStream;
 
 // web audio api
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -77,10 +81,11 @@ function setup () {
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
 
-  recordButton = createButton("Record")
-    .size(40,  25)
+  recordButton = createButton("Mic Input")
+    .size(40,  40)
     .mouseClicked(onClickRecord)
     .parent("sketch-holder");
+  recordButton.position(extraSpaceW + margin + 5, margin + 5);
 
   buttonPlay = createButton("Load")
     .size(80, 25)
@@ -437,7 +442,7 @@ handleSuccess = function(stream) {
 
   source.connect(processor);
   processor.connect(context.destination);
-
+  localStream = stream;
   processor.onaudioprocess = function(e) {
     // Do something with the data, i.e Convert this to WAV
     // console.log(e.inputBuffer);
@@ -448,8 +453,18 @@ handleSuccess = function(stream) {
   }
 }
 
-
+// callback function to start using microphone input
 onClickRecord = function() {
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+  if (micButtonStatus) {
+    recordButton.html("Stop Mic Input");
+    micButtonStatus = false;
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
+  }
+  else {
+    recordButton.html("Enable Mic Input");
+    // stop the microphone access
+    localStream.getAudioTracks()[0].stop();
+    micButtonStatus = true;
+  }
 }

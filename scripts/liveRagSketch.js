@@ -91,7 +91,7 @@ function setup () {
 
   micCheckBox = createCheckBox("Enable Mic Input", false)
     .size(100, 50)
-    .changed(onClickMicButton)
+    .changed(onChangeMicStatus)
     .parent("sketch-holder");
   micCheckBox.position(extraSpaceH + margin, extraSpaceW);
 

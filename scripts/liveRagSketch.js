@@ -82,12 +82,6 @@ function setup () {
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
 
-  recordButton = createButton("Enable Mic Input")
-    .size(80,  50)
-    .mouseClicked(onClickMicButton)
-    .parent("sketch-holder");
-  recordButton.position(extraSpaceW + margin, extraSpaceH);
-
   buttonPlay = createButton("Load")
     .size(80, 25)
     .mouseClicked(player)
@@ -125,6 +119,12 @@ function setup () {
     var rec = recordingsList[recList[i]].selectOption;
     recordingsMenu.option(rec, recList[i]);
   }
+
+  recordButton = createButton("Mic ON")
+    .size(70,  25)
+    .mouseClicked(onClickMicButton)
+    .parent("sketch-holder");
+  recordButton.position(ragMenu.position()["x"] + ragMenu.width + margin, margin);
 }
 
 function draw () {
@@ -460,18 +460,17 @@ handleSuccess = function(stream) {
 // callback function to start/stop using microphone input
 onClickMicButton = function() {
   if (micButtonStatus) {
-    recordButton.html("Stop Mic Input");
+    recordButton.html("Mic OFF");
     micButtonStatus = false;
     stopStatus = false;
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
   }
   else {
-    recordButton.html("Enable Mic Input");
+    recordButton.html("Mic ON");
     // stop the microphone access
     localStream.getAudioTracks()[0].stop();
     micButtonStatus = true;
     stopStatus = true;
   }
 }
-

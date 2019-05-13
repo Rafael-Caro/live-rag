@@ -32,6 +32,7 @@ var ragMenu;
 var recordingsMenu;
 var buttonPlay;
 var recordButton;
+var stopStatus = false;
 var micButtonStatus = true;
 
 var cursorTop;
@@ -82,8 +83,8 @@ function setup () {
   shadeColor = color(120, 0, 0);
 
   recordButton = createButton("Mic Input")
-    .size(40,  100)
-    .mouseClicked(onClickRecord)
+    .size(80,  50)
+    .mouseClicked(onClickMicButton)
     .parent("sketch-holder");
   recordButton.position(extraSpaceW + margin, extraSpaceH);
 
@@ -450,14 +451,18 @@ handleSuccess = function(stream) {
     //console.log(frequency)
     currentPitch = 1200*Math.log2(frequency/refBaseNote);
     console.log(currentPitch);
+    if (stopStatus){
+      context.close();
+    }
   }
 }
 
-// callback function to start using microphone input
-onClickRecord = function() {
+// callback function to start/stop using microphone input
+onClickMicButton = function() {
   if (micButtonStatus) {
     recordButton.html("Stop Mic Input");
     micButtonStatus = false;
+    stopStatus = false;
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(handleSuccess);
   }
@@ -466,5 +471,6 @@ onClickRecord = function() {
     // stop the microphone access
     localStream.getAudioTracks()[0].stop();
     micButtonStatus = true;
+    stopStatus = true;
   }
 }

@@ -89,7 +89,7 @@ function setup () {
     .parent("sketch-holder");
   recordButton.position(extraSpaceW + margin, extraSpaceH);
 
-  micCheckBox = createCheckBox("Enable Mic Input", false)
+  micCheckBox = createCheckbox("Enable Mic Input", false)
     .size(100, 50)
     .changed(onChangeMicStatus)
     .parent("sketch-holder");

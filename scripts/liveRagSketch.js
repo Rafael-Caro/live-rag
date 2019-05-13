@@ -32,7 +32,6 @@ var ragMenu;
 var recordingsMenu;
 var buttonPlay;
 var recordButton;
-var micCheckBox;
 var stopStatus = false;
 var micButtonStatus = true;
 
@@ -83,17 +82,11 @@ function setup () {
   frontColor = color(120, 0, 0);
   shadeColor = color(120, 0, 0);
 
-  recordButton = createButton("Mic Input")
+  recordButton = createButton("Enable Mic Input")
     .size(80,  50)
     .mouseClicked(onClickMicButton)
     .parent("sketch-holder");
   recordButton.position(extraSpaceW + margin, extraSpaceH);
-
-  micCheckBox = createCheckbox("Enable Mic Input", false)
-    .size(100, 50)
-    .changed(onChangeMicStatus)
-    .parent("sketch-holder");
-  micCheckBox.position(extraSpaceH + margin, extraSpaceW);
 
   buttonPlay = createButton("Load")
     .size(80, 25)
@@ -478,23 +471,6 @@ onClickMicButton = function() {
     // stop the microphone access
     localStream.getAudioTracks()[0].stop();
     micButtonStatus = true;
-    stopStatus = true;
-  }
-}
-
-
-// callback function to start/stop using microphone input
-onChangeMicStatus = function() {
-  if (this.checked()) {
-    stopStatus = false;
-    micCheckBox.html("Stop Mic Input");
-    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-    .then(handleSuccess);
-  }
-  else {
-    // stop the microphone access
-    micCheckBox.html("Enable Mic Input");
-    localStream.getAudioTracks()[0].stop();
     stopStatus = true;
   }
 }

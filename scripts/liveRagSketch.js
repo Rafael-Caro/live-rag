@@ -125,6 +125,7 @@ function setup () {
     .mouseClicked(onClickMicButton)
     .parent("sketch-holder");
   recordButton.position(ragMenu.position()["x"] + ragMenu.width + margin, margin);
+  recordButton.attribute("disabled", "true");
 }
 
 function draw () {
@@ -203,6 +204,13 @@ function startRag () {
   buttonPlay.attribute("hidden", true);
   recordingsMenu.value("None");
   ragMenu.value("None");
+
+  recordButton.removeAttribute("disabled");
+  recordButton.html("Mic OFF");
+  micButtonStatus = false;
+  stopStatus = false;
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+  .then(handleSuccess);
 }
 
 function start () {
@@ -234,6 +242,13 @@ function start () {
 
   recordingsMenu.value("None");
   ragMenu.value("None");
+
+  recordButton.html("Mic ON");
+  recordButton.attribute("disabled", "true");
+  // stop the microphone access
+  localStream.getAudioTracks()[0].stop();
+  micButtonStatus = true;
+  stopStatus = true;
 }
 
 function CreateNavigationBox () {

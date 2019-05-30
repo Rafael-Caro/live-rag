@@ -2,6 +2,7 @@ var currentPitch;
 var live = false;
 // var refBaseNote = 164.8;
 var refBaseNote = 329.6;
+var display = 1;
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;
@@ -393,7 +394,11 @@ function CreateSvara (svara) {
     if (this.name != "") {
       stroke(frontColor);
       strokeWeight(this.lineW);
-      line(svaraLineX1 - this.x_adjust, this.y, melCursorX + this.x_adjust, this.y)
+      if (display == 1) {
+        line(svaraLineX1 - this.x_adjust, this.y, melCursorX + this.x_adjust, this.y);
+      } else if (display == 2) {
+        line(svaraLineX1 - margin, this.y, melCursorX + this.x_adjust, this.y);
+      }
     }
   }
 
@@ -402,7 +407,9 @@ function CreateSvara (svara) {
     strokeWeight(this.strokeW);
     fill(this.col);
     ellipse(melCursorX + this.x_adjust + svaraRadius1, this.y, svaraRadius1, svaraRadius1);
-    ellipse(svaraLineX1 - this.x_adjust - svaraRadius1, this.y, svaraRadius1, svaraRadius1);
+    if (display == 1) {
+      ellipse(svaraLineX1 - this.x_adjust - svaraRadius1, this.y, svaraRadius1, svaraRadius1);
+    }
 
     textAlign(CENTER, CENTER);
     noStroke();
@@ -410,7 +417,9 @@ function CreateSvara (svara) {
     textStyle(BOLD);//this.txtStyle);
     fill(this.txtCol);
     text(this.name, melCursorX + this.x_adjust + svaraRadius1, this.y+this.radius*0.1);
-    text(this.name, svaraLineX1 - this.x_adjust - svaraRadius1, this.y+this.radius*0.1);
+    if (display == 1) {
+      text(this.name, svaraLineX1 - this.x_adjust - svaraRadius1, this.y+this.radius*0.1);
+    }
     // stroke(frontColor);
     // strokeWeight(3);
     // fill(backColor);

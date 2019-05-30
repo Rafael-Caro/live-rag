@@ -1,11 +1,12 @@
 var currentPitch;
 var live = false;
 // var refBaseNote = 164.8;
-var refBaseNote = 329.6
+var refBaseNote = 164.8;
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;
-var mainSpace = 600;
+var mainSpaceH = 600;
+var mainSpaceW = 800;
 var margin = 10;
 var easing = 0.5;
 var backColor;
@@ -19,11 +20,12 @@ var pitchSpace;
 var svaraList = [];
 var svaraRadius1 = 20;
 var svaraRadius2 = 17;
-var svaraLine = 70;
+var svaraLine = 20;
 var minHz;
 var maxHz;
 var pitchTrack;
 var trackFile;
+var melodicLine = [];
 var track;
 var trackDuration;
 var ragName;
@@ -63,7 +65,7 @@ function preload() {
 }
 
 function setup () {
-  var canvas = createCanvas(extraSpaceW+mainSpace, extraSpaceH+mainSpace);
+  var canvas = createCanvas(extraSpaceW+mainSpaceW, extraSpaceH+mainSpaceH);
   var div = select("#sketch-holder");
   div.style("width: " + width + "px; margin: 10px auto; position: relative;");
   canvas.parent("sketch-holder");
@@ -94,7 +96,8 @@ function setup () {
 
   cursorTop = extraSpaceH + margin*3 + 50;
   cursorBottom = navBox.y1 - margin*2;
-  melCursorX = extraSpaceW + (mainSpace / 2);
+  melCursorX = width - (svaraRadius1 * 4) - svaraLine - margin;
+  svaraLineX1 = extraSpaceW + (svaraRadius1 * 4) + svaraLine + margin;
 
   ragMenu = createSelect()
     .size(120, 25)
@@ -126,6 +129,10 @@ function setup () {
     .parent("sketch-holder");
   recordButton.position(ragMenu.position()["x"] + ragMenu.width + margin, margin);
   recordButton.attribute("disabled", "true");
+
+  for (var i = 0; i < melCursorX - svaraLineX1; i+=2) {
+    melodicLine.push(undefined);
+  }
 }
 
 function draw () {
@@ -139,7 +146,7 @@ function draw () {
   strokeWeight(5);
   stroke(frontColor);
   fill(backColor);
-  text(ragName, extraSpaceW + mainSpace/2, extraSpaceH + margin*3);
+  text(ragName, extraSpaceW + mainSpaceW/2, extraSpaceH + margin*3);
 
   stroke(0, 50);
   strokeWeight(1);
@@ -162,26 +169,43 @@ function draw () {
     if (!paused) {
       currentTime = track.currentTime();
     }
-
     var x = str(currentTime.toFixed(2));
     p = pitchTrack[x];
     if (p != "s" && p >= minHz && p <= maxHz) {
       var targetY = map(p, minHz, maxHz, cursorBottom, cursorTop);
+      if (!paused) {
+        melodicLine.shift();
+        melodicLine.push(targetY);
+      }
       cursorY += (targetY - cursorY) * easing;
       fill("white");
       stroke("black");
-      strokeWeight(3);
+      strokeWeight(1);
       ellipse(melCursorX, cursorY, melCursorRadius, melCursorRadius);
+    } else if (!paused) {
+      melodicLine.shift();
+      melodicLine.push(undefined);
     }
   } else if (live) {
     if (currentPitch != "s" && currentPitch >= minHz && currentPitch <= maxHz) {
       var targetY = map(currentPitch, -600, 2000, cursorBottom, cursorTop);
+      melodicLine.shift();
+      melodicLine.push(targetY);
       cursorY += (targetY - cursorY) * easing;
       fill("white");
       stroke("black");
       strokeWeight(3);
       ellipse(melCursorX, cursorY, melCursorRadius, melCursorRadius);
+    } else {
+      melodicLine.shift();
+      melodicLine.push(undefined);
     }
+  }
+
+  for (var i = 0; i < melodicLine.length-1; i++) {
+    stroke(255);
+    strokeWeight(2);
+    line(svaraLineX1 + i * 2, melodicLine[i], svaraLineX1 + (i + 1) * 2, melodicLine[i + 1] );
   }
 }
 
@@ -191,6 +215,9 @@ function startRag () {
   }
   loaded = false;
   live = true;
+  for (var i = 0; i < melodicLine.length; i++) {
+    melodicLine[i] = undefined;
+  }
   var currentRag = ragInfo[ragMenu.value()];
   pitchSpace = currentRag.pitchSpace
   ragName = currentRag.name + " " + currentRag.nameTrans;
@@ -221,6 +248,9 @@ function start () {
   paused = true;
   loaded = false;
   currentTime = 0;
+  for (var i = 0; i < melodicLine.length; i++) {
+    melodicLine[i] = undefined;
+  }
   var currentRecording = recordingsList[recordingsMenu.value()];
   trackFile = currentRecording.recording;
   trackDuration = currentRecording.duration;
@@ -283,6 +313,9 @@ function CreateNavigationBox () {
         track.jump(jump);
         jump = undefined;
       }
+      for (var i = 0; i < melodicLine.length; i++) {
+        melodicLine[i] = undefined;
+      }
     }
   }
 }
@@ -308,34 +341,29 @@ function CreateNavCursor () {
 }
 
 function CreateSvara (svara) {
-  this.x1 = melCursorX;
   this.y = map(svara.cent, minHz, maxHz, cursorBottom, cursorTop);
   this.name = svara.svara;
   this.function = svara.function;
   if (this.function == "sadja") {
     this.radius = svaraRadius1;
-    this.extraX = 20;
     this.col = frontColor;
     this.strokeW = 4;
     this.lineW = 4;
     this.txtCol = backColor;
   } else if (this.function == "vadi") {
     this.radius = svaraRadius1;
-    this.extraX = 0;
     this.col = backColor;
     this.strokeW = 4;
     this.lineW = 2;
     this.txtCol = frontColor;
   } else if (this.function == "samvadi") {
     this.radius = svaraRadius2;
-    this.extraX = 0;
     this.col = backColor;
     this.strokeW = 2;
     this.lineW = 2;
     this.txtCol = frontColor;
   } else {
     this.radius = svaraRadius2;
-    this.extraX = 0;
     this.col = color(0, 0);
     this.strokeW = 0;
     this.lineW = 1;
@@ -348,13 +376,13 @@ function CreateSvara (svara) {
   } else {
     this.position = 0;
   }
-  this.x2 = this.x1 + svaraLine/2 + (svaraRadius1*2 + margin) * this.position;
+  this.x_adjust = svaraLine + (svaraRadius1*2) * this.position;
 
   this.displayLines = function () {
     if (this.name != "") {
       stroke(frontColor);
       strokeWeight(this.lineW);
-      line(this.x1-svaraLine/2-this.extraX, this.y, this.x2, this.y)
+      line(svaraLineX1 - this.x_adjust, this.y, melCursorX + this.x_adjust, this.y)
     }
   }
 
@@ -362,20 +390,22 @@ function CreateSvara (svara) {
     stroke(frontColor);
     strokeWeight(this.strokeW);
     fill(this.col);
-    ellipse(this.x2 + svaraRadius1, this.y, svaraRadius1, svaraRadius1);
+    ellipse(melCursorX + this.x_adjust + svaraRadius1, this.y, svaraRadius1, svaraRadius1);
+    ellipse(svaraLineX1 - this.x_adjust - svaraRadius1, this.y, svaraRadius1, svaraRadius1);
 
     textAlign(CENTER, CENTER);
     noStroke();
     textSize(svaraRadius1*0.9);//this.radius*0.9);
     textStyle(BOLD);//this.txtStyle);
     fill(this.txtCol);
-    text(this.name, this.x2 + svaraRadius1, this.y+this.radius*0.1);
-    stroke(frontColor);
-    strokeWeight(3);
-    fill(backColor);
-    textSize(svaraRadius1*0.7);
-    textStyle(NORMAL);
-    text(this.key, this.x2 + svaraRadius1 + textWidth(this.name), this.y + (svaraRadius1*0.9)/2)
+    text(this.name, melCursorX + this.x_adjust + svaraRadius1, this.y+this.radius*0.1);
+    text(this.name, svaraLineX1 - this.x_adjust - svaraRadius1, this.y+this.radius*0.1);
+    // stroke(frontColor);
+    // strokeWeight(3);
+    // fill(backColor);
+    // textSize(svaraRadius1*0.7);
+    // textStyle(NORMAL);
+    // text(this.key, melCursorX + this.x_adjust + svaraRadius1 + textWidth(this.name), this.y + (svaraRadius1*0.9)/2)
   }
 }
 

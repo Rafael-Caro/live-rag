@@ -1,7 +1,7 @@
 var currentPitch;
 var live = false;
 // var refBaseNote = 164.8;
-var refBaseNote = 164.8;
+var refBaseNote = 329.6;
 
 var extraSpaceH = 45;
 var extraSpaceW = 0;
@@ -34,6 +34,7 @@ var ragMenu;
 var recordingsMenu;
 var buttonPlay;
 var recordButton;
+var freqInput;
 var stopStatus = false;
 var micButtonStatus = true;
 
@@ -111,6 +112,14 @@ function setup () {
     ragMenu.option(rag, ragList[i]);
   }
 
+  freqInput = createInput(refBaseNote)
+    .parent("sketch-holder")
+    .size(50, 19)
+    .position(ragMenu.position()["x"] + ragMenu.width + margin, margin)
+    .input(function () {
+      refBaseNote = freqInput.value();
+    });
+
   recordingsMenu = createSelect()
     .size(120, 25)
     .changed(start)
@@ -127,7 +136,7 @@ function setup () {
     .size(70,  25)
     .mouseClicked(onClickMicButton)
     .parent("sketch-holder");
-  recordButton.position(ragMenu.position()["x"] + ragMenu.width + margin, margin);
+  recordButton.position(freqInput.position()["x"] + freqInput.width + margin, margin);
   recordButton.attribute("disabled", "true");
 
   for (var i = 0; i < melCursorX - svaraLineX1; i+=2) {
@@ -234,6 +243,7 @@ function startRag () {
 
   recordButton.removeAttribute("disabled");
   recordButton.html("Mic OFF");
+  freqInput.removeAttribute("disabled");
   micButtonStatus = false;
   stopStatus = false;
   navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -275,6 +285,7 @@ function start () {
 
   recordButton.html("Mic ON");
   recordButton.attribute("disabled", "true");
+  freqInput.attribute("disabled", "true");
   // stop the microphone access
   localStream.getAudioTracks()[0].stop();
   micButtonStatus = true;
@@ -502,6 +513,10 @@ handleSuccess = function(stream) {
     }
   }
 }
+
+// function updateRefBaseNote () {
+//   print(freqInput.value());
+// }
 
 // callback function to start/stop using microphone input
 onClickMicButton = function() {

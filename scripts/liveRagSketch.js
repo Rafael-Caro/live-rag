@@ -283,7 +283,7 @@ function start () {
 
 function CreateNavigationBox () {
   this.x1 = buttonPlay.width + margin * 2;
-  this.x2 = width - margin;
+  this.x2 = width - margin - 90;
   this.y1 = height - margin - navBoxH;
   this.y2 = height - margin;
   this.w = this.x2 - this.x1;
@@ -411,17 +411,18 @@ function CreateSvara (svara) {
 
 function CreateClock () {
   this.clock;
+  this.y = navBox.y2 - navBoxH / 2;
   this.total = niceTime(trackDuration);
   this.now;
   this.display = function () {
     this.now = niceTime(currentTime);
     this.clock = this.now + " / " + this.total;
-    textAlign(RIGHT, BOTTOM);
+    textAlign(LEFT, CENTER);
     textSize(12);
     textStyle(NORMAL);
     noStroke();
     fill(frontColor);
-    text(this.clock, width - margin, navBox.y1 - margin);
+    text(this.clock, navBox.x2 + margin, this.y);
   }
 }
 

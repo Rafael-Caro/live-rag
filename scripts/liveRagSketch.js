@@ -1,4 +1,5 @@
 var currentPitch;
+var bufferPitch;
 var live = false;
 // var refBaseNote = 164.8;
 var refBaseNote = 329.6;
@@ -512,20 +513,30 @@ handleSuccess = function(stream) {
   localStream = stream;
   processor.onaudioprocess = function(e) {
     // Do something with the data, i.e Convert this to WAV
-    // console.log(e.inputBuffer);
-    var frequency = yin(e.inputBuffer.getChannelData(0), audioCtx.sampleRate, 0.3)
-    //console.log(frequency)
-    currentPitch = 1200*Math.log2(frequency/refBaseNote);
-    console.log(currentPitch);
+    var frequency = yin(e.inputBuffer.getChannelData(0), audioCtx.sampleRate, 0.1)
+
+    if (frequency < 87) {  // non voiced
+      bufferSilence.push(1);
+    } else {
+      bufferSilence.push(0);
+      bufferFrequencies.push(frequency);
+    }
+
+    // if all last yin frequencies are non voiced, output is "s"
+    if (bufferSilence.getAll().every(function(i) {return i == 1})) {
+      currentPitch = "s"
+      bufferFrequencies.refresh();  // remove all stored frequencies
+    } else {  // otherwise use the last stored frequencies
+      var frequencies = bufferFrequencies.getAll()
+      var currentFrequency = frequencies.reduce(( p, c ) => p + c, 0) / frequencies.length;
+      currentPitch = 1200*Math.log2(currentFrequency/refBaseNote);
+    }
+    
     if (stopStatus){
       context.close();
     }
   }
 }
-
-// function updateRefBaseNote () {
-//   print(freqInput.value());
-// }
 
 // callback function to start/stop using microphone input
 onClickMicButton = function() {
@@ -544,3 +555,32 @@ onClickMicButton = function() {
     stopStatus = true;
   }
 }
+
+// Circular array for storing pitch values and unvoiced segments
+function CircularArray(maxLength) {
+  this.maxLength = maxLength;
+}
+
+CircularArray.prototype = Object.create(Array.prototype);
+
+CircularArray.prototype.push = function(element) {
+  Array.prototype.push.call(this, element);
+  while (this.length > this.maxLength) {
+    this.shift();
+  }
+}
+
+CircularArray.prototype.getAll = function() {
+  var elements = []
+  for (var i=0; i<this.maxLength; i++) {elements.push(this[i])}
+  return elements
+}
+
+CircularArray.prototype.refresh = function() {
+  while (this.length > 0) {
+    this.shift();
+  }
+}
+
+var bufferFrequencies = new CircularArray(5); // keep track of frequencies for average smoothing
+var bufferSilence = new CircularArray(15);    // keep track of voiced vs unvoiced (filter some failed analysis)
